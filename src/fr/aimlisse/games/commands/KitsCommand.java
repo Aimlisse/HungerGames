@@ -43,8 +43,18 @@ public class KitsCommand implements CommandExecutor {
 					kits.setItem(47, default1);
 					
 					player.openInventory(kits);
-				}else if(args[0].equalsIgnoreCase("Basique")) {
-				
+				}if(args[0].equalsIgnoreCase("basique")) {
+				main.basiscs.add(player);
+				main.wereWolfs.remove(player);
+				main.sangsues.remove(player);
+			}if(args[0].equalsIgnoreCase("lg")) {
+				main.wereWolfs.add(player);
+				main.basiscs.remove(player);
+				main.sangsues.remove(player);
+			}if(args[0].equalsIgnoreCase("sangsue")) {
+				main.sangsues.add(player);
+				main.basiscs.remove(player);
+				main.wereWolfs.remove(player);
 			}
 			}else {
 				player.sendMessage(this.main.ErrorPrefix + "Il n'est plus possible de choisir un kit quand la partie est déjà lancée !");

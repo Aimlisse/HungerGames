@@ -35,6 +35,7 @@ import fr.aimlisse.games.events.ActualisationEvent;
 import fr.aimlisse.games.events.ClickEvent;
 import fr.aimlisse.games.events.EndEvent;
 import fr.aimlisse.games.events.JoinEvent;
+import fr.aimlisse.games.events.KitsEvent;
 import fr.aimlisse.games.events.LeaveEvent;
 import fr.aimlisse.games.events.SomeEvents;
 import fr.aimlisse.games.events.SpectatorEvent;
@@ -53,6 +54,9 @@ public class HGMain extends JavaPlugin {
 	public List<Player> spectators = new ArrayList<>();
 	public List<Player> inGame = new ArrayList<>();
 	public List<Chest> chests = new ArrayList<>();
+	public List<Player> basiscs = new ArrayList<>();
+	public List<Player> wereWolfs = new ArrayList<>();
+	public List<Player> sangsues = new ArrayList<>();
 
 	public GameStatus getStatus() {
 		return status;
@@ -61,38 +65,38 @@ public class HGMain extends JavaPlugin {
 	private void gameStart1() {
 		ItemStack blocks = new ItemStack(Material.DIRT, 16);
 		ItemStack sword = new ItemStack(Material.WOOD_SWORD);
-		
+
 		Location tp1 = new Location(Bukkit.getWorld("world"), 2.5, 112.0, 17.5, 170, 0);
 		Location tp2 = new Location(Bukkit.getWorld("world"), -2.5, 112.0, 17.5, -170, 0);
-		
+
 		Location tp3 = new Location(Bukkit.getWorld("world"), -17.5, 112.0, 2.5, -100, 0);
 		Location tp4 = new Location(Bukkit.getWorld("world"), -17.5, 112.0, -2.5, -80, 0);
-		
+
 		Location tp5 = new Location(Bukkit.getWorld("world"), -2.5, 112.0, -17.5, -10, 0);
 		Location tp6 = new Location(Bukkit.getWorld("world"), 2.5, 112.0, -17.5, 10, 0);
-		
+
 		Location tp7 = new Location(Bukkit.getWorld("world"), 17.5, 112.0, -2.5, 80, 0);
 		Location tp8 = new Location(Bukkit.getWorld("world"), 17.5, 112.0, 2.5, 100, 0);
 		int loc = 0;
 		for (Player playersOnline : Bukkit.getOnlinePlayers()) {
-			loc = loc +1;
-			if(loc == 1) {
+			loc = loc + 1;
+			if (loc == 1) {
 				playersOnline.teleport(tp1);
-			}else if(loc == 2) {
+			} else if (loc == 2) {
 				playersOnline.teleport(tp2);
-			}else if(loc == 3) {
+			} else if (loc == 3) {
 				playersOnline.teleport(tp3);
-			}else if(loc == 4) {
+			} else if (loc == 4) {
 				playersOnline.teleport(tp4);
-			}else if(loc == 5) {
+			} else if (loc == 5) {
 				playersOnline.teleport(tp5);
-			}else if(loc == 6) {
+			} else if (loc == 6) {
 				playersOnline.teleport(tp6);
-			}else if(loc == 7) {
+			} else if (loc == 7) {
 				playersOnline.teleport(tp7);
-			}else if(loc == 8) {
+			} else if (loc == 8) {
 				playersOnline.teleport(tp8);
-			}else {
+			} else {
 				playersOnline.kickPlayer(ErrorPrefix + "Une erreur s'est produite lors de la téléportation !\"");
 			}
 			playersOnline.setAllowFlight(false);
@@ -107,10 +111,10 @@ public class HGMain extends JavaPlugin {
 			// getConfig().getDouble("aimlissehg.spawn-z")));
 			playersOnline.sendMessage(teleportedMessage);
 			// invincible.add(playersOnline);
-			setStatus(GameStatus.IN);
 
 		}
 
+		setStatus(GameStatus.IN);
 	}
 
 	public void gameStart(Boolean force) {
@@ -180,7 +184,7 @@ public class HGMain extends JavaPlugin {
 
 	public Boolean isBetaMode = false;
 	public String BetaItemStackName = "§c§lParamètres Bêta";
-	
+
 	public Location spawn = new Location(Bukkit.getWorld("world"), 0, 110, 0, 0, 0);
 
 	public String SpecTeleportItem = "§aTéléportation à un joueur";
@@ -212,6 +216,7 @@ public class HGMain extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new SpectatorEvent(this), this);
 		getServer().getPluginManager().registerEvents(new ActualisationEvent(this), this);
 		getServer().getPluginManager().registerEvents(new EndEvent(this), this);
+		getServer().getPluginManager().registerEvents(new KitsEvent(this), this);
 		getCommand("kits").setExecutor(new KitsCommand(this));
 		getCommand("spec").setExecutor(new SpecCommand(this));
 		getCommand("start").setExecutor(new StartCommand(this));
@@ -260,6 +265,32 @@ public class HGMain extends JavaPlugin {
 		File regen = new File("/world1");
 		regen.getName().equalsIgnoreCase("/world");
 		chests.clear();
+	}
+
+	public void giveKits() {
+		if (started == false)
+			return;
+		if (status != GameStatus.IN)
+			return;
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (wereWolfs.contains(player)) {
+
+				player.getInventory().setItem(0, new ItemStack(Material.STONE_AXE));
+			}
+			if (basiscs.contains(player)) {
+				ItemStack  bread = new ItemStack(Material.BREAD);
+				bread.setAmount(16);
+				player.getInventory().setItem(0, new ItemStack(Material.STONE_SWORD));
+				player.getInventory().setItem(1, new ItemStack(Material.WOOD_AXE));
+				player.getInventory().setItem(2, new ItemStack(Material.WOOD_PICKAXE));
+				player.getInventory().setItem(8, bread);
+				
+			}
+			if (sangsues.contains(player)) {
+				player.getInventory().setItem(0, new ItemStack(Material.WOOD_SWORD));
+			}
+		}
+
 	}
 
 }
