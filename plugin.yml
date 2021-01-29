@@ -1,0 +1,12 @@
+name: AimlisseHungerGame
+version: 0.2.0
+author: Salers
+description: A hunger game plugin for Aimlisse Network
+commands:
+  kits:
+    aliases: [kits, k]
+  spec:
+  start:
+  spawn:
+    
+main: fr.aimlisse.games.HGMain
